@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operations Manager GPT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="vignette"></div>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Autonomous Ops Interface // v1.0</div>
+    <h1>OPERATIONS MANAGER GPT</h1>
+    <div class="sub">Ask it anything about your business operations. It answers out loud.</div>
+  </header>
+
+  <div class="core-stage" id="core-stage">
+    <svg id="core-svg" viewBox="0 0 300 300">
+      <defs>
+        <radialGradient id="headGradient" cx="50%" cy="35%" r="75%">
+          <stop offset="0%" stop-color="#2a0413"/>
+          <stop offset="100%" stop-color="#0d0106"/>
+        </radialGradient>
+      </defs>
+
+      <!-- outer HUD halo -->
+      <circle class="ring ring-b" cx="150" cy="150" r="130" stroke-dasharray="1 8"/>
+      <circle class="ring ring-a" cx="150" cy="150" r="112" stroke-dasharray="5 4 1 4"/>
+
+      <!-- antenna -->
+      <line class="antenna-stem" x1="150" y1="60" x2="150" y2="38"/>
+      <circle class="antenna-tip" cx="150" cy="34" r="5"/>
+
+      <!-- head shell -->
+      <rect class="head" x="82" y="62" width="136" height="128" rx="34"/>
+      <path class="head-panel" d="M96 150 h108 M96 132 h108"/>
+
+      <!-- eyes -->
+      <rect class="eye l" x="108" y="104" width="16" height="22" rx="8"/>
+      <rect class="eye r" x="176" y="104" width="16" height="22" rx="8"/>
+
+      <!-- mouth: waveform bar stack, driven by speechSynthesis output -->
+      <g id="bars" transform="translate(150,160)">
+        <rect class="bar" x="-36" y="-3" width="6" height="6" rx="3"/>
+        <rect class="bar" x="-24" y="-5" width="6" height="10" rx="3"/>
+        <rect class="bar" x="-12" y="-8" width="6" height="16" rx="3"/>
+        <rect class="bar" x="0"   y="-9" width="6" height="18" rx="3"/>
+        <rect class="bar" x="12"  y="-8" width="6" height="16" rx="3"/>
+        <rect class="bar" x="24"  y="-5" width="6" height="10" rx="3"/>
+        <rect class="bar" x="36"  y="-3" width="6" height="6" rx="3"/>
+      </g>
+
+      <!-- side audio-jack ears -->
+      <rect x="70" y="112" width="10" height="30" rx="4" fill="#0d0106" stroke="rgba(224,17,95,0.35)"/>
+      <rect x="220" y="112" width="10" height="30" rx="4" fill="#0d0106" stroke="rgba(224,17,95,0.35)"/>
+    </svg>
+  </div>
+
+  <div class="console">
+    <div class="console-head">
+      <span>ANSWER LOG</span>
+      <span class="dots"><i></i><i></i><i></i></span>
+    </div>
+    <div id="log">
+      <div class="line sys placeholder">// tap the mic and ask about ops, tasks, or the business — answers and updates appear here.</div>
+    </div>
+    <div class="voice-bar">
+      <button type="button" id="mute" title="Toggle voice output">🔊</button>
+      <button type="button" id="mic" title="Tap to speak">🎙️</button>
+      <span class="voice-status" id="voice-status">TAP TO SPEAK</span>
+    </div>
+  </div>
+
+  <footer>ENDPOINT: n8n workflow &mdash; live webhook relay</footer>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

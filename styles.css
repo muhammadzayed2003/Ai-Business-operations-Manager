@@ -1,0 +1,288 @@
+:root{
+  --void:#050002;
+  --panel:#160208;
+  --panel-2:#20030c;
+  --raspberry:#E0115F;
+  --raspberry-deep:#8E0045;
+  --raspberry-bright:#FF4D8D;
+  --text:#F7E7EE;
+  --line: rgba(224,17,95,0.16);
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--void);
+  color:var(--text);
+  font-family:'Rajdhani',sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+  position:relative;
+}
+
+/* ambient scanline grid */
+.grid-bg{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size:42px 42px;
+  animation:drift 18s linear infinite;
+  opacity:0.5;
+  mask-image: radial-gradient(ellipse at 50% 30%, black 10%, transparent 75%);
+}
+@keyframes drift{
+  0%{background-position:0 0, 0 0;}
+  100%{background-position:0 420px, 420px 0;}
+}
+.vignette{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background: radial-gradient(ellipse at 50% 15%, rgba(224,17,95,0.10), transparent 55%),
+              radial-gradient(ellipse at 50% 100%, rgba(142,0,69,0.16), transparent 60%);
+}
+
+.wrap{
+  position:relative;
+  z-index:1;
+  max-width:920px;
+  margin:0 auto;
+  padding:48px 24px 80px;
+}
+
+header{
+  text-align:center;
+  margin-bottom:8px;
+}
+.eyebrow{
+  font-family:'JetBrains Mono', monospace;
+  font-size:11px;
+  letter-spacing:0.35em;
+  text-transform:uppercase;
+  color:var(--raspberry-bright);
+  opacity:0.8;
+  margin-bottom:14px;
+}
+h1{
+  font-family:'Orbitron', sans-serif;
+  font-weight:900;
+  font-size:clamp(28px, 5vw, 46px);
+  letter-spacing:0.02em;
+  margin:0;
+  background:linear-gradient(180deg, #ffffff 0%, var(--raspberry) 130%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  text-shadow:0 0 40px rgba(224,17,95,0.3);
+}
+.sub{
+  font-size:15px;
+  color:#c98ba3;
+  margin-top:10px;
+  font-weight:500;
+  letter-spacing:0.02em;
+}
+
+/* --- robot avatar --- */
+.core-stage{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px 0 10px;
+}
+#core-svg{
+  width:min(280px, 60vw);
+  height:min(280px, 60vw);
+  overflow:visible;
+}
+.ring{
+  transform-origin:150px 150px;
+  fill:none;
+  stroke-width:1.2;
+}
+.ring-a{stroke:var(--raspberry); opacity:0.45;}
+.ring-b{stroke:var(--raspberry-bright); opacity:0.28;}
+
+@keyframes spin{ to{ transform:rotate(360deg); } }
+@keyframes spinRev{ to{ transform:rotate(-360deg); } }
+.ring-a{ animation:spin 20s linear infinite; }
+.ring-b{ animation:spinRev 28s linear infinite; }
+
+.head{
+  fill:url(#headGradient);
+  stroke:rgba(224,17,95,0.4);
+  stroke-width:1.5;
+}
+.head-panel{
+  fill:none;
+  stroke:rgba(224,17,95,0.2);
+  stroke-width:1;
+}
+.antenna-stem{ stroke:rgba(224,17,95,0.45); stroke-width:2; }
+.antenna-tip{ fill:var(--raspberry); transition:filter 0.25s ease; }
+
+.eye{
+  fill:var(--raspberry-bright);
+  transition:filter 0.2s ease, height 0.12s ease, y 0.12s ease;
+  filter:drop-shadow(0 0 6px var(--raspberry));
+}
+@keyframes blink{
+  0%, 92%, 100%{ transform:scaleY(1); }
+  95%{ transform:scaleY(0.08); }
+}
+.eye{ transform-box:fill-box; transform-origin:center; animation:blink 5.5s ease-in-out infinite; }
+.eye.r{ animation-delay:0.15s; }
+
+.core-stage.listening .antenna-tip{ filter:drop-shadow(0 0 14px var(--raspberry-bright)); }
+.core-stage.listening .eye{ fill:#ffffff; filter:drop-shadow(0 0 10px var(--raspberry-bright)); animation:none; }
+.core-stage.listening .ring-a{ animation-duration:3s; }
+.core-stage.listening .ring-b{ animation-duration:1.6s; }
+
+.core-stage.thinking .antenna-tip{ filter:drop-shadow(0 0 12px var(--raspberry-deep)); fill:var(--raspberry-deep); }
+.core-stage.thinking .eye{ fill:var(--raspberry-deep); filter:drop-shadow(0 0 10px var(--raspberry-deep)); animation:none; }
+.core-stage.thinking .ring-a{ animation-duration:2s; }
+
+.core-stage.speaking .antenna-tip{ filter:drop-shadow(0 0 16px var(--raspberry)); }
+.core-stage.speaking .eye{ animation:none; filter:drop-shadow(0 0 12px var(--raspberry)); }
+.core-stage.speaking .ring-a{ animation-duration:6s; }
+.core-stage.speaking .ring-b{ animation-duration:9s; }
+
+.bar{
+  fill:var(--raspberry);
+  transform-box:fill-box;
+  transform-origin:center bottom;
+  rx:2;
+}
+
+/* transcript / answer box */
+.console{
+  margin-top:34px;
+  border:1px solid rgba(224,17,95,0.22);
+  background:linear-gradient(180deg, var(--panel), var(--panel-2));
+  border-radius:10px;
+  padding:0;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.02) inset, 0 20px 60px rgba(0,0,0,0.5);
+}
+.console-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 18px;
+  border-bottom:1px solid rgba(224,17,95,0.16);
+  font-family:'JetBrains Mono', monospace;
+  font-size:11px;
+  letter-spacing:0.08em;
+  color:#a8748a;
+  text-transform:uppercase;
+}
+.console-head .dots{display:flex; gap:6px;}
+.console-head .dots i{width:8px;height:8px;border-radius:50%;background:#3a0a1c; display:block;}
+
+#log{
+  max-height:340px;
+  overflow-y:auto;
+  padding:18px 20px;
+  font-family:'JetBrains Mono', monospace;
+  font-size:13.5px;
+  line-height:1.7;
+}
+#log::-webkit-scrollbar{width:8px;}
+#log::-webkit-scrollbar-thumb{background:#3a0a1c; border-radius:4px;}
+
+.line{margin-bottom:14px; white-space:pre-wrap; word-break:break-word;}
+.line .tag{
+  display:inline-block;
+  font-size:10px;
+  letter-spacing:0.1em;
+  padding:2px 7px;
+  border-radius:4px;
+  margin-right:8px;
+  transform:translateY(-1px);
+}
+.line.you .tag{background:rgba(255,77,141,0.15); color:var(--raspberry-bright); border:1px solid rgba(255,77,141,0.35);}
+.line.bot .tag{background:rgba(224,17,95,0.14); color:var(--raspberry); border:1px solid rgba(224,17,95,0.35);}
+.line.sys .tag{background:rgba(142,0,69,0.2); color:#c98ba3; border:1px solid rgba(142,0,69,0.4);}
+.line.you{color:#f3d3e0;}
+.line.bot{color:var(--text);}
+.line.sys{color:#a8748a; font-size:12px;}
+
+.placeholder{color:#6b3348; font-style:italic;}
+
+/* voice control bar (replaces text composer) */
+.voice-bar{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:16px;
+  padding:20px 18px 22px;
+  border-top:1px solid rgba(224,17,95,0.16);
+}
+
+button#mic{
+  position:relative;
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  border:1.5px solid rgba(224,17,95,0.5);
+  background:radial-gradient(circle at 50% 40%, #2a0413, #12020a);
+  color:var(--raspberry-bright);
+  font-size:24px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:box-shadow 0.2s ease, transform 0.1s ease, border-color 0.2s ease;
+  box-shadow:0 0 0 rgba(224,17,95,0.4);
+}
+button#mic:hover{box-shadow:0 0 24px rgba(224,17,95,0.4);}
+button#mic:active{transform:scale(0.96);}
+button#mic.listening{
+  border-color:var(--raspberry-bright);
+  box-shadow:0 0 0 8px rgba(224,17,95,0.12), 0 0 30px rgba(255,77,141,0.5);
+  animation:pulse-mic 1.2s ease-in-out infinite;
+}
+button#mic:disabled{opacity:0.4; cursor:not-allowed;}
+@keyframes pulse-mic{
+  0%, 100%{ box-shadow:0 0 0 6px rgba(224,17,95,0.12), 0 0 20px rgba(255,77,141,0.4); }
+  50%{ box-shadow:0 0 0 12px rgba(224,17,95,0.06), 0 0 34px rgba(255,77,141,0.6); }
+}
+
+.voice-status{
+  font-family:'JetBrains Mono', monospace;
+  font-size:12px;
+  letter-spacing:0.06em;
+  color:#a8748a;
+  text-transform:uppercase;
+  min-width:150px;
+}
+
+button#mute{
+  background:none;
+  border:1px solid rgba(224,17,95,0.3);
+  color:#a8748a;
+  border-radius:7px;
+  width:44px;
+  height:44px;
+  font-size:16px;
+  cursor:pointer;
+}
+button#mute.active{color:var(--raspberry-bright); border-color:rgba(224,17,95,0.55);}
+
+footer{
+  text-align:center;
+  margin-top:30px;
+  font-family:'JetBrains Mono', monospace;
+  font-size:10.5px;
+  color:#4a1526;
+  letter-spacing:0.06em;
+}
+
+@media (max-width:480px){
+  .voice-bar{flex-wrap:wrap;}
+  .voice-status{text-align:center; min-width:100%; order:3;}
+}
+
+@media (prefers-reduced-motion: reduce){
+  .ring-a,.ring-b,.grid-bg,.eye,button#mic.listening{animation:none !important;}
+}

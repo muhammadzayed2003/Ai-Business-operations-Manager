@@ -1,0 +1,130 @@
+{
+  "name": "MCP Server - HubSpot",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "d8755bcc-63e5-49e6-941e-0f11dc061d54"
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "typeVersion": 2,
+      "position": [
+        -160,
+        -32
+      ],
+      "id": "1ac1cde0-773b-41be-9c0f-b2e8dccfb26f",
+      "name": "MCP Server Trigger",
+      "webhookId": "d8755bcc-63e5-49e6-941e-0f11dc061d54"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Fetches recent contacts/leads from HubSpot CRM. Use this when the user asks about leads, new contacts, or potential customers.",
+        "authentication": "oAuth2",
+        "operation": "getAll",
+        "limit": 20,
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.hubspotTool",
+      "typeVersion": 2.2,
+      "position": [
+        176,
+        192
+      ],
+      "id": "31437dde-f0bd-4a1a-a0df-44888b383973",
+      "name": "Get Leads",
+      "credentials": {
+        "hubspotOAuth2Api": {
+          "id": "qVQWLt5J2WlkNGa9",
+          "name": "HubSpot OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Fetches recent deals from HubSpot pipeline including deal name, stage, and amount. Use this when the user asks about deals, sales pipeline, or opportunities.",
+        "authentication": "oAuth2",
+        "resource": "deal",
+        "operation": "getAll",
+        "limit": 20,
+        "filters": {
+          "properties": [
+            "dealname",
+            "hs_closed_amount",
+            "dealstage",
+            "closedate"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.hubspotTool",
+      "typeVersion": 2.2,
+      "position": [
+        416,
+        176
+      ],
+      "id": "c967d569-220b-4993-aea8-66bc320b8920",
+      "name": "Get Deals",
+      "credentials": {
+        "hubspotOAuth2Api": {
+          "id": "qVQWLt5J2WlkNGa9",
+          "name": "HubSpot OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "MCP SERVER FOR HUBSPOT",
+        "height": 416,
+        "width": 768,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        -80
+      ],
+      "id": "8f91b357-cc70-4234-a42d-e39049dead18",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Get Leads": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Deals": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "169eeb59-2d02-4acd-871f-b9459cb3e38c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "de84a8b00bb17e6001d7ea1f37489a71c7cb307c2cd2af4109bd987e06ec0e6c"
+  },
+  "nodeGroups": [],
+  "id": "eH8bVZxvvtJk6efj",
+  "tags": []
+}

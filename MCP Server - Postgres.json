@@ -1,0 +1,154 @@
+{
+  "name": "MCP Server - Postgres",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "9a84cd84-9bcd-46ac-ab83-8168560ee655"
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "typeVersion": 2,
+      "position": [
+        -672,
+        -96
+      ],
+      "id": "a1c144f4-ad6e-49d8-8f71-b8ad44864289",
+      "name": "MCP Server Trigger",
+      "webhookId": "9a84cd84-9bcd-46ac-ab83-8168560ee655"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Execute a SQL query in PostgresFetches recent customer records including name, email, and phone number. Use this when the user asks about customers, client list, or who signed up recently.",
+        "operation": "executeQuery",
+        "query": "SELECT id, name, email, phone, created_at FROM customers ORDER BY created_at DESC LIMIT 20;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.6,
+      "position": [
+        -384,
+        160
+      ],
+      "id": "afe74dc6-c65f-4551-9321-5eb54abe9eb8",
+      "name": "get customers",
+      "credentials": {
+        "postgres": {
+          "id": "0J82F3ZrJlQHXRFD",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Fetches recent orders including customer name, item purchased, amount, and status. Use this when the user asks about orders, sales, revenue, or today's business activity.",
+        "operation": "executeQuery",
+        "query": "SELECT o.id, c.name AS customer_name, o.item, o.amount, o.status, o.created_at\nFROM orders o\nJOIN customers c ON o.customer_id = c.id\nORDER BY o.created_at DESC\nLIMIT 20;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.6,
+      "position": [
+        -272,
+        160
+      ],
+      "id": "f653bf8e-65bc-47f8-9958-4d3ed771552b",
+      "name": "get orders",
+      "credentials": {
+        "postgres": {
+          "id": "0J82F3ZrJlQHXRFD",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Fetches recent support tickets including customer name, subject, and status (open/closed). Use this when the user asks about support issues, complaints, or open tickets.",
+        "operation": "executeQuery",
+        "query": "SELECT t.id, c.name AS customer_name, t.subject, t.status, t.created_at\nFROM support_tickets t\nJOIN customers c ON t.customer_id = c.id\nORDER BY t.created_at DESC\nLIMIT 20;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.6,
+      "position": [
+        -144,
+        160
+      ],
+      "id": "7cfc6414-6eb2-463c-83a0-fa0c0018b2d1",
+      "name": "Get Support Tickets",
+      "credentials": {
+        "postgres": {
+          "id": "0J82F3ZrJlQHXRFD",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "MCP SERVER FOR POSTGRES",
+        "height": 464,
+        "width": 720,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        -144
+      ],
+      "id": "6a95e1af-77b2-4f80-bc85-b98b9a105dac",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "get customers": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get orders": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Support Tickets": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "459600a4-dcb7-4a87-9b80-d39a8f8c7f81",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "de84a8b00bb17e6001d7ea1f37489a71c7cb307c2cd2af4109bd987e06ec0e6c"
+  },
+  "nodeGroups": [],
+  "id": "iu3IHx4hAYZhQoQZ",
+  "tags": []
+}

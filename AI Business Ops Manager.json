@@ -1,0 +1,404 @@
+{
+  "name": "AI Business Ops Manager",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "All monetary values are in Pakistani Rupees. Always write amounts as \"Rs.\" or \"PKR\" followed by the number — never use the ₹ symbol."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -224,
+        -176
+      ],
+      "id": "72a272d2-0c84-4471-9e7b-eda6e5abc36c",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        -128,
+        32
+      ],
+      "id": "3920cf77-b6d0-4b67-982a-ab584a3523d1",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -336,
+        16
+      ],
+      "id": "4d380a03-39a7-4075-9d94-659dfff5ff11",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://zayed333.app.n8n.cloud/mcp/9a84cd84-9bcd-46ac-ab83-8168560ee655",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.3,
+      "position": [
+        144,
+        384
+      ],
+      "id": "4df23ac4-c6d2-4b7c-8830-faa985664620",
+      "name": "Postgres MCP Tools"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://zayed333.app.n8n.cloud/mcp/d8755bcc-63e5-49e6-941e-0f11dc061d54",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.3,
+      "position": [
+        288,
+        352
+      ],
+      "id": "394cdb34-9ee2-4bda-837e-4bbf0d1266f4",
+      "name": "HubSpot MCP Tools"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Fetches tasks and status updates from the business tracker Google Sheet. Use this when the user asks about tasks, follow-ups, or pending work.",
+        "documentId": {
+          "__rl": true,
+          "value": "1HBlFwEe5I1x4-K2nCGkLOwqiPwCtP9hpm-Fft-lsagU",
+          "mode": "list",
+          "cachedResultName": "Business Ops Tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1HBlFwEe5I1x4-K2nCGkLOwqiPwCtP9hpm-Fft-lsagU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1HBlFwEe5I1x4-K2nCGkLOwqiPwCtP9hpm-Fft-lsagU/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        480,
+        208
+      ],
+      "id": "bbca0065-ab01-4924-abbe-c693739d3f82",
+      "name": "Get Sheet Data",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "3l9pGo1oP6EcKvln",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Fetches today's emails from Gmail inbox. Use this when the user asks about emails, messages, or inbox activity for today.",
+        "operation": "getAll",
+        "limit": 20,
+        "filters": {
+          "q": "=after:{{ $now.minus(1, 'day').format('yyyy/MM/dd') }}"
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.2,
+      "position": [
+        624,
+        176
+      ],
+      "id": "4b0f952d-7eee-41a5-9bdc-78262f66ac1b",
+      "name": "get todays email",
+      "webhookId": "dc8cbe79-ba37-4b25-a94a-610c47a7a771",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "jX8OaR5ecW76XW1I",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "=1224300130762799",
+        "recipientPhoneNumber": "+923025610139",
+        "textBody": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Text_Body', ``, 'string') }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.whatsAppTool",
+      "typeVersion": 1.1,
+      "position": [
+        560,
+        -112
+      ],
+      "id": "1799a581-fbc9-4555-b7f6-69bad6f89388",
+      "name": "Send message in WhatsApp Business Cloud",
+      "webhookId": "662b2067-b01f-443a-9ac7-d964e68e430d",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "gSnTCd9Eav3Oo4uk",
+          "name": "WhatsApp account"
+        }
+      },
+      "notes": "Sends a WhatsApp message to the business owner. Use this when the user asks to send a summary or notification via WhatsApp."
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "b944a9d3-8af2-4189-91ef-60d5e93f17b5",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -640,
+        -368
+      ],
+      "id": "9701b8d1-7a4a-42ea-b1c4-90d080cf23c6",
+      "name": "Webhook",
+      "webhookId": "b944a9d3-8af2-4189-91ef-60d5e93f17b5"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        80,
+        -336
+      ],
+      "id": "ed6c2313-3f47-4ebc-9753-c32eff3a0169",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const body = $input.item.json.body || $input.item.json || {};\n\nconst chatInput = body.chatInput || body.message || body.question || '';\n\nreturn {\n  json: {\n    chatInput: chatInput,\n    sessionId: \"web-session-1\"\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -448,
+        -176
+      ],
+      "id": "82278a11-a6dc-41f7-a7c7-02b89c7d7214",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "content": "MCP Client tools",
+        "height": 208,
+        "width": 384
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        32,
+        304
+      ],
+      "id": "4c600ebe-8d42-41a0-8bd7-5132223afab8",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "GET emails and sheet data\n",
+        "height": 256,
+        "width": 288
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        448,
+        80
+      ],
+      "id": "46223a47-96fe-4cb9-8510-434a49aa9790",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "Response in whatsapp",
+        "height": 224,
+        "width": 272
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        464,
+        -176
+      ],
+      "id": "5e2e5f74-fcb4-4ac7-afd2-f536201a9923",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "AI Business Ops Manager – Core Flow",
+        "height": 624,
+        "width": 1056,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -704,
+        -448
+      ],
+      "id": "3ae3656d-594e-457b-979d-7378edb8cb71",
+      "name": "Sticky Note3"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres MCP Tools": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HubSpot MCP Tools": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Sheet Data": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get todays email": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message in WhatsApp Business Cloud": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "878fa7db-73a9-4742-915f-2e4900a168fd",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "de84a8b00bb17e6001d7ea1f37489a71c7cb307c2cd2af4109bd987e06ec0e6c"
+  },
+  "nodeGroups": [],
+  "id": "npQDQxU75DssG1LH",
+  "tags": []
+}
